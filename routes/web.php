@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\VerifyCsrfToken;
 use App\Http\Controllers\SwishController;
 
 Route::get('/', function () {
@@ -10,4 +11,4 @@ Route::get('/', function () {
 //Route::get('/swish/test',       'SwishController@test');
 
 Route::get('/swish/test', [SwishController::class, 'test']);
-Route::post('/swish/callback', [SwishController::class, 'callback']);
+Route::post('/swish/callback', [SwishController::class, 'callback'])->withoutMiddleware([VerifyCsrfToken::class]);
