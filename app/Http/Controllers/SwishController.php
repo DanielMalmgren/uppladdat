@@ -35,16 +35,20 @@ class SwishController extends Controller
     public function callback(Request $request)
     {
         logger("CALLBACK!");
-        //logger(print_r($request, true));
 
         $data = file_get_contents('php://input');
         $decoded = json_decode($data, $assoc = true);
 
         logger("Data: ".$data);
         logger("Object: ");
-        logger(print_r($decoded));
+        logger(print_r($decoded, true));
+    }
 
-        // do something with the json array
-        //var_dump($decoded);
+    public function postpay(Request $request)
+    {
+        $data = [
+        ];
+
+        return view('swish.postpay')->with($data);
     }
 }

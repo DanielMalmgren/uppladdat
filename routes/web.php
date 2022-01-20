@@ -12,3 +12,4 @@ Route::get('/', function () {
 
 Route::get('/swish/test', [SwishController::class, 'test']);
 Route::post('/swish/callback', [SwishController::class, 'callback'])->withoutMiddleware([VerifyCsrfToken::class]);
+Route::get('/swish/postpay', [SwishController::class, 'postpay']);

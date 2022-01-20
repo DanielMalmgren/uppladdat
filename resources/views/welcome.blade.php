@@ -53,7 +53,7 @@
 
                             <div class="ml-12">
                                 <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Äger du en eller flera laddstolpar för elbilar som ofta står oanvända? Uppladd.at ger dig möjligheten att på ett låta dina medtrafikanter ladda och betala för detta på ett enkelt och flexibelt sätt. Låter det intressant? Hör av dig till oss på <a href="mailto:info@vikomp.se">info@vikomp.se</a>.
+                                    Äger du en eller flera laddstolpar som ofta står oanvända? Uppladd.at ger dig möjligheten att låta dina medtrafikanter ladda och betala för detta på ett enkelt och flexibelt sätt. Låter det intressant? Hör av dig till oss på <a href="mailto:info@vikomp.se">info@vikomp.se</a>.
                                     <br><br>
                                 </div>
                             </div>

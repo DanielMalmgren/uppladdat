@@ -12,14 +12,12 @@
 
             <div class="card">
                 <div class="card-header">
-                    Skickar Swish-förfrågan!
+                    Tack för din betalning!
                 </div>
 
                 <div class="card-body">
 
-                    Om allt fungerar borde du nu få upp Swish-appen i din telefon.
-
-                    ID: {{$id}}
+                    Nu ska det börja ladda!
 
                 </div>
             </div>
