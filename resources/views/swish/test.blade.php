@@ -2,10 +2,6 @@
 
 @section('content')
 
-<script type="text/javascript">
-    window.location = "swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}";
-</script>
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -21,9 +17,17 @@
 
                     ID: {{$id}}
 
+                    Eller så klickar du här för att starta den manuellt:
+                    <a href="swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}">swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}</a>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    window.location = "swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}";
+</script>
+
 @endsection

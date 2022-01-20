@@ -34,13 +34,12 @@ class SwishController extends Controller
 
     public function callback(Request $request)
     {
-        logger("CALLBACK!");
+        logger("SWISH CALLBACK!");
 
         $data = file_get_contents('php://input');
         $decoded = json_decode($data, $assoc = true);
 
-        logger("Data: ".$data);
-        logger("Object: ");
+        logger("Data:");
         logger(print_r($decoded, true));
     }
 
