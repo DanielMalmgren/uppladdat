@@ -13,11 +13,11 @@
 
                 <div class="card-body">
 
-                    Om allt fungerar borde du nu få upp Swish-appen i din telefon.
+                    Om allt fungerar borde du nu få upp Swish-appen i din telefon.<br>
 
-                    ID: {{$id}}
+                    ID: {{$id}}<br>
 
-                    Eller så klickar du här för att starta den manuellt:
+                    Eller så klickar du här för att starta den manuellt:<br>
                     <a href="swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}">swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}</a>
 
                 </div>

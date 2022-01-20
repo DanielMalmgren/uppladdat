@@ -2,10 +2,6 @@
 
 @section('content')
 
-<script type="text/javascript">
-    window.location = "swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}";
-</script>
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -18,6 +14,8 @@
                 <div class="card-body">
 
                     Nu ska det börja ladda!
+
+                    Eller... funktionen att faktiskt starta en laddare finns inte än. Men så finns det å andra sidan inte heller funktion för att kolla så du faktiskt har betalat...
 
                 </div>
             </div>
