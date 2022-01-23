@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use HelmutSchneider\Swish\Client;
 use HelmutSchneider\Swish\PaymentRequest;
+use App\Models\Payment;
+use App\Models\ChargingSession;
 
 class SwishController extends Controller
 {
     public function pay(Request $request)
     {
+        //$charging_session = ChargingSession::find($request->charging_session);
+
         $rootCert = storage_path('app/cert/Swish_TLS_RootCA.pem');
         $clientCert = [storage_path('app/cert/Swish_Merchant_TestCertificate_1234679304.pem'), 'swish'];
 
@@ -29,6 +33,12 @@ class SwishController extends Controller
         logger("Swish ID: ".$response->id);
         logger("Swish token: ".$response->paymentRequestToken);
 
+        $payment = new Payment();
+        $payment->id = $response->id;
+        $payment->charging_session_id = $request->charging_session;
+        $payment->payment_method = 'Swish';
+        $payment->save();
+
         $data = [
             'id' => $response->id,
             'token' => $response->paymentRequestToken,
@@ -47,7 +57,13 @@ class SwishController extends Controller
         logger("Data:");
         logger(print_r($decoded, true));
 
-        //TODO: Should save payment status into ongoing payments table
+        $payment = Payment::find($decoded->id);
+        $payment->status = $decoded->status;
+        $payment->payerAlias = $decoded->payerAlias;
+        $payment->payeeAlias = $decoded->payeeAlias;
+        $payment->currency = $decoded->currency;
+        $payment->amount = $decoded->amount;
+        $payment->save();
     }
 
     public function postpay(Request $request)
