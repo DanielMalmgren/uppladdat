@@ -57,12 +57,12 @@ class SwishController extends Controller
         logger("Data:");
         logger(print_r($decoded, true));
 
-        $payment = Payment::find($decoded->id);
-        $payment->status = $decoded->status;
-        $payment->payerAlias = $decoded->payerAlias;
-        $payment->payeeAlias = $decoded->payeeAlias;
-        $payment->currency = $decoded->currency;
-        $payment->amount = $decoded->amount;
+        $payment = Payment::find($decoded['id']);
+        $payment->status = $decoded['status'];
+        $payment->payerAlias = $decoded['payerAlias'];
+        $payment->payeeAlias = $decoded['payeeAlias'];
+        $payment->currency = $decoded['currency'];
+        $payment->amount = $decoded['amount'];
         $payment->save();
     }
 
