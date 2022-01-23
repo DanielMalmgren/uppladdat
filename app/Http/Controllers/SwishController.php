@@ -8,9 +8,8 @@ use HelmutSchneider\Swish\PaymentRequest;
 
 class SwishController extends Controller
 {
-    public function test(Request $request)
+    public function pay(Request $request)
     {
-
         $rootCert = storage_path('app/cert/Swish_TLS_RootCA.pem');
         $clientCert = [storage_path('app/cert/Swish_Merchant_TestCertificate_1234679304.pem'), 'swish'];
 
@@ -18,18 +17,24 @@ class SwishController extends Controller
 
         $pr = new PaymentRequest([
             'callbackUrl' => env('APP_URL').'/swish/callback',
-            'payeePaymentReference' => '12345',
             'payeeAlias' => '1231181189',
             'amount' => '100',
+            'message' => 'Betalning för laddning',
         ]);
 
-        $id = $client->createPaymentRequest($pr);
+        //Using a not merged PR in swish-php to get the PaymentRequestToken
+        //See https://github.com/helmutschneider/swish-php/pull/20
+        $response = $client->createPaymentRequest($pr);
+
+        logger("Swish ID: ".$response->id);
+        logger("Swish token: ".$response->paymentRequestToken);
 
         $data = [
-            'id' => $id,
+            'id' => $response->id,
+            'token' => $response->paymentRequestToken,
         ];
 
-        return view('swish.test')->with($data);
+        return view('swish.pay')->with($data);
     }
 
     public function callback(Request $request)
@@ -41,10 +46,14 @@ class SwishController extends Controller
 
         logger("Data:");
         logger(print_r($decoded, true));
+
+        //TODO: Should save payment status into ongoing payments table
     }
 
     public function postpay(Request $request)
     {
+        //TODO: Check payment status in ongoing payments table. If OK, continue to charger stuff
+
         $data = [
         ];
 
