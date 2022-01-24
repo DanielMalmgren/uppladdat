@@ -60,7 +60,7 @@ class SwishController extends Controller
         $payment->amount = $decoded['amount'];
         $payment->save();
 
-        if($payment->charging_session !== null) {
+        if($payment->charging_session_id !== null) {
             $payment->charging_session->status = $payment->status;
             //TODO: Påbörja själva laddningen här!
         }
