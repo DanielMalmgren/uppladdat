@@ -26,7 +26,14 @@ class GuestChargeController extends Controller
 
     public function success(Request $request)
     {
+        $charging_session = ChargingSession::find($request->charging_session_id);
+
+        if(isset($charging_session)) {
+            $end_at = $charging_session->end_at;
+        }
+
         $data = [
+            'end_at' => $end_at,
         ];
 
         return view('guest_charge.success')->with($data);

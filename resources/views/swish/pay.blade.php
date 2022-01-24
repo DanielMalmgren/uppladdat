@@ -42,7 +42,7 @@
                     polls++;
                     console.log(polls);
                     if(data=='PAID') {
-                        window.location = "/gc/success";
+                        window.location = "/gc/success?charging_session_id={{$charging_session_id}}";
                     }
                     if(polls>180 || data=='DECLINED'|| data=='ERROR' || data=='CANCELLED') {
                         window.location = "/gc/failure";

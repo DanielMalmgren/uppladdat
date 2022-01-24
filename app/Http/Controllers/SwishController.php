@@ -12,7 +12,11 @@ class SwishController extends Controller
 {
     public function pay(Request $request)
     {
-        //$charging_session = ChargingSession::find($request->charging_session);
+        $charging_session = ChargingSession::find($request->charging_session);
+
+        if($charging_session == null) {
+            return response('Missing charging session ID!', 400);
+        }
 
         $rootCert = storage_path('app/cert/Swish_TLS_RootCA.pem');
         $clientCert = [storage_path('app/cert/Swish_Merchant_TestCertificate_1234679304.pem'), 'swish'];
@@ -21,8 +25,8 @@ class SwishController extends Controller
 
         $pr = new PaymentRequest([
             'callbackUrl' => env('APP_URL').'/swish/callback',
-            'payeeAlias' => '1231181189',
-            'amount' => '100',
+            'payeeAlias' => $charging_session->charger->owner->owner_payment_methods->where('payment_method', 'Swish')->first()->identifier,
+            'amount' => $charging_session->amount,
             'message' => 'Betalning för laddning',
         ]);
 
@@ -35,7 +39,7 @@ class SwishController extends Controller
 
         $payment = new Payment();
         $payment->id = $response->id;
-        $payment->charging_session_id = $request->charging_session;
+        $payment->charging_session_id = $charging_session->id;
         $payment->payment_method = 'Swish';
         $payment->save();
 
@@ -60,10 +64,7 @@ class SwishController extends Controller
         $payment->amount = $decoded['amount'];
         $payment->save();
 
-        logger("session_id: ".$payment->charging_session_id);
         if($payment->charging_session_id !== null) {
-            logger("Old status: ".$payment->charging_session->status);
-            logger("New status: ".$payment->status);
             $payment->charging_session->status = $decoded['status'];
             $payment->charging_session->save();
             //TODO: Påbörja själva laddningen här!

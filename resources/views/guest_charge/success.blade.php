@@ -13,7 +13,11 @@
 
                 <div class="card-body">
 
-                    Nu ska det börja ladda!
+                    Laddaren aktiveras nu.<br><br>
+
+                    @isset($end_at)
+                        Du kan ladda fram till {{$end_at->format('H:i')}}<br><br>
+                    @endisset
 
                 </div>
             </div>

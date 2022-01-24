@@ -26,6 +26,12 @@ class DatabaseSeeder extends Seeder
             'api' => 'ctek',
         ]);
 
+        DB::table('owner_payment_methods')->insert([
+            'owner_id' => 1,
+            'payment_method' => 'Swish',
+            'identifier' => '1231181189',
+        ]);
+
         \App\Models\User::factory(10)->create();
 
     }
