@@ -61,7 +61,7 @@ class SwishController extends Controller
         $payment->save();
 
         if($payment->charging_session !== null) {
-            $charging_session = $payment->charging_session->status = $payment->status;
+            $payment->charging_session->status = $payment->status;
             //TODO: Påbörja själva laddningen här!
         }
 
