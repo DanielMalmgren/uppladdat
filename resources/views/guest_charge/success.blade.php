@@ -15,8 +15,6 @@
 
                     Nu ska det börja ladda!
 
-                    Eller... funktionen att faktiskt starta en laddare finns inte än. Men så finns det å andra sidan inte heller funktion för att kolla så du faktiskt har betalat...
-
                 </div>
             </div>
         </div>

@@ -16,8 +16,8 @@
                     Om allt fungerar borde du nu få upp Swish-appen i din telefon.<br><br>
 
                     Annars får du använda QR-koden istället:<br>
-                    <a href="swish://paymentrequest?token={{$token}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}">
-                        {!! QrCode::size(250)->generate("swish://paymentrequest?token=".$token."&callbackurl=".urlencode(env('APP_URL').'/swish/postpay')); !!}
+                    <a href="{{$applink}}">
+                        {!! QrCode::size(300)->generate($applink); !!}
                     </a>
                 </div>
             </div>
@@ -27,7 +27,35 @@
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function(){
-        window.location = "swish://paymentrequest?token={{$id}}&callbackurl={{urlencode(env('APP_URL').'/swish/postpay')}}";
+        window.location = "{{$applink}}";
+    });
+
+    $(function() {
+        polls = 0;
+
+        function poll() {
+            $.ajax({
+                url: '/gc/checkstatus/{{$charging_session_id}}',
+                dataType:"text",
+                type: 'GET',
+                success: function(data) {
+                    polls++;
+                    console.log(polls);
+                    if(data=='PAID') {
+                        window.location = "/gc/success";
+                    }
+                    if(polls>180 || data=='DECLINED'|| data=='ERROR' || data=='CANCELLED') {
+                        window.location = "/gc/failure";
+                    }
+                    setTimeout(poll,1000);
+                },
+                error: function() {
+                    console.log("ERROR");
+                }
+            });
+        }
+
+        poll();
     });
 </script>
 

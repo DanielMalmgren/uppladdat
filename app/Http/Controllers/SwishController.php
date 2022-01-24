@@ -40,8 +40,8 @@ class SwishController extends Controller
         $payment->save();
 
         $data = [
-            'id' => $response->id,
-            'token' => $response->paymentRequestToken,
+            'applink' => "swish://paymentrequest?token=".$response->paymentRequestToken."&callbackurl=".urlencode(env('APP_URL')."/swish/postpay"),
+            'charging_session_id' => $payment->charging_session_id,
         ];
 
         return view('swish.pay')->with($data);
@@ -49,13 +49,8 @@ class SwishController extends Controller
 
     public function callback(Request $request)
     {
-        logger("SWISH CALLBACK!");
-
         $data = file_get_contents('php://input');
         $decoded = json_decode($data, $assoc = true);
-
-        logger("Data:");
-        logger(print_r($decoded, true));
 
         $payment = Payment::find($decoded['id']);
         $payment->status = $decoded['status'];
@@ -64,15 +59,11 @@ class SwishController extends Controller
         $payment->currency = $decoded['currency'];
         $payment->amount = $decoded['amount'];
         $payment->save();
-    }
 
-    public function postpay(Request $request)
-    {
-        //TODO: Check payment status in ongoing payments table. If OK, continue to charger stuff
+        if($payment->charging_session !== null) {
+            $charging_session = $payment->charging_session->status = $payment->status;
+            //TODO: Påbörja själva laddningen här!
+        }
 
-        $data = [
-        ];
-
-        return view('swish.postpay')->with($data);
     }
 }
