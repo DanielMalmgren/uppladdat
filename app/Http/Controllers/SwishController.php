@@ -41,6 +41,7 @@ class SwishController extends Controller
         $payment->id = $response->id;
         $payment->charging_session_id = $charging_session->id;
         $payment->payment_method = 'Swish';
+        $payment->clientip = $request->ip();
         $payment->save();
 
         $data = [

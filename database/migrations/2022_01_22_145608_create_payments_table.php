@@ -25,6 +25,7 @@ class CreatePaymentsTable extends Migration
             $table->string('payeeAlias')->nullable();
             $table->string('currency')->nullable();
             $table->decimal('amount', 6, 2)->nullable();
+            $table->string('clientip', 39);
             $table->timestamps();
         });
     }
