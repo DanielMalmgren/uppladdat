@@ -1,17 +1,19 @@
-@extends('layouts.app')
+@extends('adminlte::page')
+
+@section('title', 'uppladd.at admin')
+
+@section('content_header')
+    <h1 class="m-0 text-dark">Översikt</h1>
+@stop
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    <div class="row">
+        <div class="col-12">
             <div class="card">
-                <div class="card-header">Administration</div>
-
                 <div class="card-body">
-                    {{ __('You are logged in!') }}
+                    <p class="mb-0">Ingenting här än!</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
+@stop
