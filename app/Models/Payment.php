@@ -12,11 +12,6 @@ class Payment extends Model
 
     public $incrementing = false;
 
-    public function owner(): BelongsTo
-    {
-        return $this->belongsTo('App\Models\Owner');
-    }
-
     public function charging_session(): BelongsTo
     {
         return $this->belongsTo('App\Models\ChargingSession');

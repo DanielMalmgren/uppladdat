@@ -21,6 +21,7 @@ Route::get('/gc/{charger}', [GuestChargeController::class, 'init']);
 
 Route::get('/swish/pay', [SwishController::class, 'pay']);
 Route::post('/swish/callback', [SwishController::class, 'callback'])->withoutMiddleware([VerifyCsrfToken::class]);
+Route::get('/swish/refund', [SwishController::class, 'refund'])->middleware('auth');
 
 Route::get('/admin', [AdminController::class, 'index']);
 

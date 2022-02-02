@@ -11,7 +11,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <x-adminlte-datatable id="table1" :heads="$heads">
+                    <x-adminlte-datatable id="table1" :heads="$heads" :config="$config">
                         @foreach($payments as $payment)
                             <tr>
                                 @foreach($payment as $cell)

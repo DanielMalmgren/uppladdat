@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use HelmutSchneider\Swish\Client;
 use HelmutSchneider\Swish\PaymentRequest;
+use HelmutSchneider\Swish\Refund;
 use App\Models\Payment;
 use App\Models\ChargingSession;
 
@@ -50,6 +51,33 @@ class SwishController extends Controller
         ];
 
         return view('swish.pay')->with($data);
+    }
+
+    public function refund(Request $request)
+    {
+        $payment = Payment::find($request->originalPaymentReference);
+
+        if($request->originalPaymentReference == null) {
+            return response('Missing payment reference!', 400);
+        } elseif($payment == null) {
+            return response('Unvalid payment reference!', 400);
+        }
+
+        $rootCert = storage_path('app/cert/Swish_TLS_RootCA.pem');
+        $clientCert = [storage_path('app/cert/Swish_Merchant_TestCertificate_1234679304.pem'), 'swish'];
+
+        $client = Client::make($rootCert, $clientCert, 'https://mss.cpc.getswish.net/swish-cpcapi/api/v1');
+
+        $r = new Refund([
+            'callbackUrl' => env('APP_URL').'/swish/callback',
+            'payerAlias' => $payment->charging_session->charger->owner->owner_payment_methods->where('payment_method', 'Swish')->first()->identifier,
+            'amount' => $payment->amount,
+            'originalPaymentReference' => $request->originalPaymentReference,
+        ]);
+
+        $response = $client->createRefund($r);
+
+        logger("Swish refund response: ".$response);
     }
 
     public function callback(Request $request)
