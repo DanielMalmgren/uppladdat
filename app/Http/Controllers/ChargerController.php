@@ -22,7 +22,7 @@ class ChargerController extends Controller
             $chargers[$charger->id]['designation'] = $charger->designation;
             $chargers[$charger->id]['api'] = $charger->api;
             $chargers[$charger->id]['price_per_hour'] = $charger->price_per_hour.' kr';
-            $chargers[$charger->id]['actions'] = '<a href="/admin/chargers/'.$charger->id.'/edit" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>';
+            $chargers[$charger->id]['actions'] = '<a href="/admin/chargers/'.$charger->id.'/edit" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Inställningar"><i class="fa fa-lg fa-fw fa-pen"></i></a>';
         }
 
         $config = [

@@ -24,4 +24,24 @@
             </div>
         </div>
     </div>
+
+    <script type="text/javascript">
+        function refund(id, amount) {
+            if(confirm('Vill du verkligen återbetala denna betalning (' + amount + ' kr)?')) {
+                var token = "{{ csrf_token() }}";
+                $.ajax({
+                    url: '/swish/refund?originalPaymentReference=' + id,
+                    data : {_token:token},
+                    type: 'GET',
+                    success: function(result) {
+                        console.log(result)
+                    }
+                })
+                .always(function() {
+                    console.log("Not much yet");
+                });
+            }
+        }
+    </script>
+
 @stop

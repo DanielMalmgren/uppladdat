@@ -21,8 +21,18 @@
                         </div>
 
                         <div class="row">
-                            <x-adminlte-textarea name="infotext" label="Infotext till kunder" value="{{$owner->infotext}}" fgroup-class="col-md-6" enable-old-support/>
+                            <x-adminlte-textarea name="infotext" label="Infotext till kunder" fgroup-class="col-md-6" enable-old-support>
+                                {{$owner->infotext}}
+                            </x-adminlte-textarea>
                         </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <input type="hidden" name="show_info_page" value="0">
+                                <label><input type="checkbox" name="show_info_page" value="1" {{$owner->show_info_page?"checked":""}}>Visa infosida för kunder</label>
+                            </div>
+                        </div>
+
 
                         <x-adminlte-button type="submit" label="Spara" theme="success" icon="fas fa-lg fa-save"/>    
                     </form>

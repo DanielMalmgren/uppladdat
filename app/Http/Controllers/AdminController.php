@@ -30,7 +30,8 @@ class AdminController extends Controller
             $payments[$payment->id]['payerAlias'] = $payment->payerAlias;
             $payments[$payment->id]['amount'] = $payment->amount.' kr';
             $payments[$payment->id]['status'] = $payment->status;
-            $payments[$payment->id]['actions'] = '<a href="/swish/refund?originalPaymentReference='.$payment->id.'" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Återbetala"><i class="fas fa-lg fa-fw fa-undo"></i></a>';
+            $payments[$payment->id]['actions'] = '<a href="#" onclick="refund(\''.$payment->id.'\',\''.$payment->amount.'\')" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Återbetala"><i class="fas fa-lg fa-fw fa-undo"></i></a>'.
+                                                '<a href="/admin/chargers/'.$payment->charging_session->charger->id.'/edit" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Gå till laddare"><i class="fas fa-lg fa-fw fa-charging-station"></i></a>';
         }
 
         $config = [

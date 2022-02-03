@@ -20,8 +20,9 @@ Route::get('/gc/failure', [GuestChargeController::class, 'failure']);
 Route::get('/gc/{charger}', [GuestChargeController::class, 'init']);
 
 Route::get('/swish/pay', [SwishController::class, 'pay']);
-Route::post('/swish/callback', [SwishController::class, 'callback'])->withoutMiddleware([VerifyCsrfToken::class]);
+Route::post('/swish/pay/callback', [SwishController::class, 'pay_callback'])->withoutMiddleware([VerifyCsrfToken::class]);
 Route::get('/swish/refund', [SwishController::class, 'refund'])->middleware('auth');
+Route::post('/swish/refund/callback', [SwishController::class, 'refund_callback'])->withoutMiddleware([VerifyCsrfToken::class]);
 
 Route::get('/admin', [AdminController::class, 'index']);
 

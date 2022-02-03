@@ -25,7 +25,7 @@ class SwishController extends Controller
         $client = Client::make($rootCert, $clientCert, 'https://mss.cpc.getswish.net/swish-cpcapi/api/v1');
 
         $pr = new PaymentRequest([
-            'callbackUrl' => env('APP_URL').'/swish/callback',
+            'callbackUrl' => env('APP_URL').'/swish/pay/callback',
             'payeeAlias' => $charging_session->charger->owner->owner_payment_methods->where('payment_method', 'Swish')->first()->identifier,
             'amount' => $charging_session->amount,
             'message' => 'Betalning för laddning',
@@ -69,7 +69,7 @@ class SwishController extends Controller
         $client = Client::make($rootCert, $clientCert, 'https://mss.cpc.getswish.net/swish-cpcapi/api/v1');
 
         $r = new Refund([
-            'callbackUrl' => env('APP_URL').'/swish/callback',
+            'callbackUrl' => env('APP_URL').'/swish/refund/callback',
             'payerAlias' => $payment->charging_session->charger->owner->owner_payment_methods->where('payment_method', 'Swish')->first()->identifier,
             'amount' => $payment->amount,
             'originalPaymentReference' => $request->originalPaymentReference,
@@ -80,10 +80,24 @@ class SwishController extends Controller
         logger("Swish refund response: ".$response);
     }
 
-    public function callback(Request $request)
+    public function refund_callback(Request $request)
     {
         $data = file_get_contents('php://input');
         $decoded = json_decode($data, $assoc = true);
+
+        logger("Swish refund callback from ".$request->ip().". Content:".$data);
+
+        $payment = Payment::find($decoded['originalPaymentReference']);
+        $payment->status = $decoded['status'];
+        $payment->save();
+    }
+   
+    public function pay_callback(Request $request)
+    {
+        $data = file_get_contents('php://input');
+        $decoded = json_decode($data, $assoc = true);
+
+        logger("Swish pay callback from ".$request->ip().". Content:".$data);
 
         $payment = Payment::find($decoded['id']);
         $payment->status = $decoded['status'];
@@ -98,6 +112,5 @@ class SwishController extends Controller
             $payment->charging_session->save();
             //TODO: Påbörja själva laddningen här!
         }
-
     }
 }

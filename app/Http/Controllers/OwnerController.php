@@ -49,6 +49,8 @@ class OwnerController extends Controller
     public function update(Request $request, Owner $owner)
     {
         $owner->name = $request->name;
+        $owner->infotext = $request->infotext;
+        $owner->show_info_page = $request->show_info_page;
         $owner->save();
 
         return redirect('/admin/owners')->with('success', 'Ändringar sparade');
