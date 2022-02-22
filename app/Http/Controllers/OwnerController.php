@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Owner;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 
 class OwnerController extends Controller
 {
@@ -12,15 +15,20 @@ class OwnerController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(): View
     {
-        //TODO: Only return the owners that the current user has permissions for!
-
-        $owners = [];
-        foreach(Owner::all() as $owner) {
-            $owners[$owner->id] = [];
-            $owners[$owner->id]['name'] = $owner->name;
-            $owners[$owner->id]['actions'] = '<a href="/admin/owners/'.$owner->id.'/edit" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>';
+        $user = Auth::user();
+        if($user->is_admin) {
+            $owners = Owner::all();
+        } else {
+            $owners = $user->owners;
+        }
+        
+        $rows = [];
+        foreach($owners as $owner) {
+            $rows[$owner->id] = [];
+            $rows[$owner->id]['name'] = $owner->name;
+            $rows[$owner->id]['actions'] = '<a href="/admin/owners/'.$owner->id.'/edit" class="btn btn-xs btn-default text-primary mx-1 shadow" title="Edit"><i class="fa fa-lg fa-fw fa-pen"></i></a>';
         }
 
         $config = [
@@ -29,7 +37,7 @@ class OwnerController extends Controller
         ];
 
         $data = [
-            'rows' => $owners,
+            'rows' => $rows,
             'heads' => ['Namn', ''],
             'config' => $config,
         ];
@@ -37,7 +45,7 @@ class OwnerController extends Controller
         return view('admin.owners.index')->with($data);
     }
 
-    public function edit(Owner $owner)
+    public function edit(Owner $owner): View
     {
         $data = [
             'owner' => $owner,
@@ -46,7 +54,7 @@ class OwnerController extends Controller
         return view('admin.owners.edit')->with($data);
     }
 
-    public function update(Request $request, Owner $owner)
+    public function update(Request $request, Owner $owner): RedirectResponse
     {
         $owner->name = $request->name;
         $owner->infotext = $request->infotext;

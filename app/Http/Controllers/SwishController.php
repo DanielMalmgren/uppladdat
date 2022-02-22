@@ -3,15 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use HelmutSchneider\Swish\Client;
 use HelmutSchneider\Swish\PaymentRequest;
 use HelmutSchneider\Swish\Refund;
 use App\Models\Payment;
 use App\Models\ChargingSession;
+use Illuminate\View\View;
 
 class SwishController extends Controller
 {
-    public function pay(Request $request)
+    public function pay(Request $request): View|Response
     {
         $charging_session = ChargingSession::find($request->charging_session);
 
@@ -31,8 +33,6 @@ class SwishController extends Controller
             'message' => 'Betalning för laddning',
         ]);
 
-        //Using a not merged PR in swish-php to get the PaymentRequestToken
-        //See https://github.com/helmutschneider/swish-php/pull/20
         $response = $client->createPaymentRequest($pr);
 
         logger("Swish ID: ".$response->id);
@@ -71,7 +71,7 @@ class SwishController extends Controller
         $r = new Refund([
             'callbackUrl' => env('APP_URL').'/swish/refund/callback',
             'payerAlias' => $payment->charging_session->charger->owner->owner_payment_methods->where('payment_method', 'Swish')->first()->identifier,
-            'amount' => $payment->amount,
+            'amount' => strval($payment->amount),
             'originalPaymentReference' => $request->originalPaymentReference,
         ]);
 
@@ -80,7 +80,7 @@ class SwishController extends Controller
         logger("Swish refund response: ".$response);
     }
 
-    public function refund_callback(Request $request)
+    public function refund_callback(Request $request): void
     {
         $data = file_get_contents('php://input');
         $decoded = json_decode($data, $assoc = true);
@@ -92,7 +92,7 @@ class SwishController extends Controller
         $payment->save();
     }
    
-    public function pay_callback(Request $request)
+    public function pay_callback(Request $request): void
     {
         $data = file_get_contents('php://input');
         $decoded = json_decode($data, $assoc = true);

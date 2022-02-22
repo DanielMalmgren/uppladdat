@@ -7,6 +7,7 @@ use App\Http\Controllers\GuestChargeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ChargerController;
 use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,7 +27,7 @@ Route::post('/swish/refund/callback', [SwishController::class, 'refund_callback'
 
 Route::get('/admin', [AdminController::class, 'index']);
 
-Route::get('/admin/payments', [AdminController::class, 'payments']);
+Route::get('/admin/payments', [PaymentController::class, 'index']);
 
 Route::get('/admin/chargers', [ChargerController::class, 'index']);
 Route::get('/admin/chargers/{charger}/edit', [ChargerController::class, 'edit']);

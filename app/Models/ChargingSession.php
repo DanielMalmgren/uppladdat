@@ -15,12 +15,12 @@ class ChargingSession extends Model
 
     protected $dates = ['start_at', 'end_at'];
 
-    function initialize(Charger $charger) {
+    function initialize(Charger $charger): void
+    {
         $this->charger_id = $charger->id;
-        $this->start_at = (new \DateTime());
+        $this->start_at = (Carbon::now());
         list($hours, $minutes, $seconds) = sscanf($charger->owner->max_time, '%d:%d:%d');
-        $length = new \DateInterval(sprintf('PT%dH%dM%dS', $hours, $minutes, $seconds));
-        $this->end_at = (new \DateTime())->add($length);
+        $this->end_at = (Carbon::now()->addHours($hours)->addMinutes($minutes)->addSeconds($seconds));
         $this->save();
     }
 
@@ -34,12 +34,12 @@ class ChargingSession extends Model
         return $this->hasMany('App\Models\Payment');
     }
 
-    public function getDurationAttribute()
+    public function getDurationAttribute(): float
     {
         return $this->end_at->diffInMinutes($this->start_at)/60;
     }
 
-    public function getAmountAttribute()
+    public function getAmountAttribute(): float
     {
         return $this->duration * $this->charger->price_per_hour;
     }
