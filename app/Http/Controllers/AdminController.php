@@ -15,6 +15,9 @@ class AdminController extends Controller
 
     public function index(): View
     {
-        return view('admin.index');
+        $data = [
+        ];
+
+        return view('admin.index')->with($data);
     }
 }
